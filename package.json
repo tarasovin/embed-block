@@ -1,7 +1,7 @@
 {
-	"name": "embed-code-file",
-	"version": "1.2.0",
-	"description": "This is a plugin for Obsidian that allows for embedding code files.",
+	"name": "embed-block",
+	"version": "1.5.0",
+	"description": "This is a plugin for Obsidian that allows for embedding code blocks from files and Jupyter notebooks.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
