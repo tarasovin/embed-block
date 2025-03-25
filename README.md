@@ -28,9 +28,17 @@ This fork adds significant new features to the original embed-code-file plugin:
 
 ## Settings
 
-The plugin include multiple language by default (`c,cpp,java,python,go,ruby,javascript,js,typescript,ts,shell,sh,bash`). You can include any needed language to the comma separated list.
+### Basic Settings
 
-You can also customize the markers used for code extraction and the comment styles for different languages.
+The plugin has built-in support for many programming languages (`c,cpp,java,python,go,ruby,javascript,js,typescript,ts,shell,sh,bash`). You can add any necessary languages to the comma-separated list.
+
+You can also configure the markers used for code extraction and comment styles for different languages.
+
+#### Title Options
+
+- **Title Font Color** - Customize the color of the embedded block title text
+- **Title Background Color** - Customize the background color of the title bar
+- **Hide Title** - Enable this option to completely hide titles in all embedded blocks
 
 ### Jupyter Notebook Settings
 
@@ -109,6 +117,16 @@ TITLE: "Some title"
 ```
 ````
 
+#### Vault File with hidden title:
+
+````yaml
+```embed-cpp
+PATH: "vault://Code/main.cpp"
+LINES: "10-20"
+TITLE: ""
+```
+````
+
 Where the code file might have markers like:
 
 ```cpp
@@ -142,6 +160,17 @@ PATH: "vault://Data/analysis.ipynb"
 CELL: "3"
 CONTENT: "code"
 TITLE: "Python code for data cleaning"
+```
+````
+
+#### Jupyter Notebook Code Cell (No Title):
+
+````yaml
+```embed-jupyter
+PATH: "vault://Data/analysis.ipynb"
+CELL: "3"
+CONTENT: "code"
+TITLE: ""
 ```
 ````
 
@@ -182,28 +211,29 @@ TITLE: "Documentation from notebook"
 
 For regular code files:
 
-* The `PATH` should be a code file in the vault or remote. If you have used GitHub for example, make sure to use `https://raw.githubusercontent.com/...`
+* `PATH` should point to your code file in the vault or remote file. If you're using GitHub, make sure you're using `https://raw.githubusercontent.com/...`
 
-* The `LINES` will include only the specified lines of the code file. Every set of included lines either range or explicit line will append dots (`...`) to included line in a newline. If you want to get rid of dots, minimize the number of sets by using one range as much as you can.
+* `LINES` will include only the specified lines from the file. Each set of included lines (individual lines or range) will add an ellipsis (`...`) to the included line on a new line. If you want to get rid of the ellipsis, minimize the number of sets using one range as much as possible.
 
-* The `MARKERS` allows you to extract code between specific markers in the file. The format is `START_MARKER,END_MARKER` or with identifiers `START_MARKER:id,END_MARKER:id`. The plugin will automatically detect the comment style based on the language.
+* `MARKERS` allows you to extract code between specific markers in the file. Format: `START_MARKER,END_MARKER` or with identifiers `START_MARKER:id,END_MARKER:id`. The plugin will automatically detect the comment style based on the language.
 
 For Jupyter notebooks:
 
 * The `CELL` parameter can be:
-  - A number (0-based index): `CELL: "0"` for the first cell
-  - An ID: `CELL: "id:cell123"` for a cell with a specific ID in its metadata
+  - A number (index, starting at 0): `CELL: "0"` for the first cell
+  - An ID: `CELL: "id:cell123"` for a cell with specific ID in metadata
   - A tag: `CELL: "tag:important_chart"` for a cell with a specific tag (visible in Jupyter UI)
   - A type selector: `CELL: "type:code"` or `CELL: "type:markdown"`
 
-* The `CONTENT` parameter specifies what to extract:
-  - `code`: To show the cell's code (for code cells)
-  - `output`: To show the cell's execution output (for code cells)
-  - `markdown`: To show the cell's markdown content (for markdown cells)
+* The `CONTENT` parameter determines what to extract:
+  - `code`: Show the cell's code (for code cells)
+  - `output`: Show the cell's execution result (for code cells)
+  - `markdown`: Show the cell's markdown content (for markdown cells)
 
-* If `TITLE` is not set, then the title of the code block will be `PATH` value.
+* If `TITLE` is not provided, the title of the code block will be the `PATH` value.
+* You can use `TITLE: ""` (empty string) to hide the title for a specific block, even if the global "Hide Title" setting is not enabled.
 
-### Working with Cell Tags in Jupyter Notebook
+### Working with cell tags in Jupyter Notebook
 
 To add tags to cells in Jupyter Notebook:
 

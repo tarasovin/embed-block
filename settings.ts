@@ -6,6 +6,7 @@ export interface EmbedCodeFileSettings {
 	includedLanguages: string;
 	titleBackgroundColor: string;
 	titleFontColor: string;
+	hideTitle: boolean;
 	commentStyles: {[key: string]: string};
 	defaultStartMarker: string;
 	defaultEndMarker: string;
@@ -22,6 +23,7 @@ export const DEFAULT_SETTINGS: EmbedCodeFileSettings = {
 	includedLanguages: 'c,cs,cpp,java,python,go,ruby,javascript,js,typescript,ts,shell,sh,bash',
 	titleBackgroundColor: "#00000020",
 	titleFontColor: "",
+	hideTitle: false,
 	commentStyles: {
 		'c,cpp,cs,java,javascript,js,typescript,ts': '//',
 		'python,ruby,shell,sh,bash': '#',
@@ -80,6 +82,16 @@ export class EmbedCodeFileSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.titleBackgroundColor)
 				.onChange(async (value) => {
 					this.plugin.settings.titleBackgroundColor = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Hide title')
+			.setDesc('Hide the title completely for all embedded blocks')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideTitle)
+				.onChange(async (value) => {
+					this.plugin.settings.hideTitle = value;
 					await this.plugin.saveSettings();
 				}));
 				

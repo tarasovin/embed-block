@@ -165,7 +165,10 @@ export default class EmbedCodeFile extends Plugin {
 			
 			// Заголовок блока
 			let title = metaYaml.TITLE
-			if (!title) {
+			if (title === "") {
+				// Если TITLE явно установлен в пустую строку, не добавляем заголовок вообще
+				return;
+			} else if (!title) {
 				title = `${srcPath} (${contentType} from cell ${cellSelector})`;
 			}
 			
@@ -277,7 +280,10 @@ export default class EmbedCodeFile extends Plugin {
 			}
 
 			let title = metaYaml.TITLE
-			if (!title) {
+			if (title === "") {
+				// Если TITLE явно установлен в пустую строку, не добавляем заголовок вообще
+				return;
+			} else if (!title) {
 				title = srcPath
 			}
 
@@ -329,10 +335,17 @@ export default class EmbedCodeFile extends Plugin {
 	}
 
 	insertTitlePreElement(pre: HTMLPreElement, title: string) {
+		// Удаляем существующие заголовки
 		pre
 		.querySelectorAll(".obsidian-embed-code-file")
 		.forEach((x) => x.remove());
 
+		// Если в настройках включено скрытие заголовков, то не добавляем его
+		if (this.settings.hideTitle) {
+			return;
+		}
+
+		// Добавляем заголовок
 		let titleElement = document.createElement("pre");
 		titleElement.appendText(title);
 		titleElement.className = "obsidian-embed-code-file";
