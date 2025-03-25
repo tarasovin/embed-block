@@ -436,8 +436,8 @@ export default class EmbedCodeFile extends Plugin {
 		styleEl.textContent = `
 			/* Общие правила для кнопки копирования */
 			.copy-code-button {
-				top: 4px !important;
-				right: 4px !important;
+				top: 12px !important;
+				right: 12px !important;
 				z-index: 5 !important;
 				opacity: 0.7 !important;
 				position: absolute !important;
@@ -450,16 +450,16 @@ export default class EmbedCodeFile extends Plugin {
 			/* Общие правила для кнопки редактирования, перемещаем все в нижний угол */
 			.edit-block-button {
 				top: auto !important;
-				bottom: 4px !important;
-				right: 4px !important;
+				bottom: 12px !important;
+				right: 12px !important;
 				z-index: 10 !important;
 				position: absolute !important;
 			}
 			
 			/* Правила для стандартных блоков кода Obsidian */
 			.markdown-rendered pre > .copy-code-button {
-				top: 4px !important;
-				right: 4px !important;
+				top: 12px !important;
+				right: 12px !important;
 			}
 			
 			/* Правила для блоков без заголовка */
@@ -468,15 +468,15 @@ export default class EmbedCodeFile extends Plugin {
 			.markdown-source-view div.code-block-wrap + div > .edit-block-button,
 			.markdown-source-view pre.code-block + div > .edit-block-button {
 				top: auto !important;
-				bottom: 4px !important;
-				right: 4px !important;
+				bottom: 12px !important;
+				right: 12px !important;
 			}
 			
 			/* Специальные правила для наших кастомных блоков */
 			.markdown-rendered .embed-code-file-container + div > .edit-block-button {
 				top: auto !important;
-				bottom: 4px !important;
-				right: 4px !important;
+				bottom: 12px !important;
+				right: 12px !important;
 			}
 			
 			/* Удаление серого бордера вокруг блока и стилизация под стандартные блоки кода Obsidian */
