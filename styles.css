@@ -1,12 +1,189 @@
-.markdown-rendered pre .obsidian-embed-code-file {
+/* Общие стили для сброса отступов и рамок у блоков */
+.markdown-rendered .embed-code-file-container * {
+    box-sizing: border-box;
+}
+
+.markdown-rendered .embed-code-file-container {
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
     position: relative;
-    top: 3px;
-    left: 0px;
-    font-size: 85%!important;
-    padding: 3px 8px!important;
-    border-radius: 0px!important;
-    margin-top: -9px!important;
-    margin-left:-9px!important;
-    margin-right:-9px!important;
-    margin-bottom:9px!important;
+}
+
+/* Перемещаем кнопку редактирования в нижний правый угол */
+.markdown-rendered .embed-code-file-container + div > .edit-block-button {
+    top: auto !important;
+    bottom: 4px !important;
+    right: 4px !important;
+}
+
+/* Стили для заголовка кодового блока */
+.markdown-rendered .embed-code-file-title {
+    font-size: 85% !important;
+    padding: 6px 12px !important;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+    margin: 0 !important;
+}
+
+/* Перезаписываем стили для markdown-рендеринга внутри контейнера */
+.markdown-rendered .embed-code-file-container .markdown-rendered {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Убираем лишние отступы у всех элементов внутри контейнера */
+.markdown-rendered .embed-code-file-container > div > p,
+.markdown-rendered .embed-code-file-container > p,
+.markdown-rendered .embed-code-file-container .code-wrapper > div > p {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Стили для блоков кода внутри контейнера */
+.markdown-rendered .embed-code-file-container pre {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: 8px !important;
+}
+
+.markdown-rendered .embed-code-file-container pre code {
+    font-family: var(--font-monospace);
+    padding: 0 !important;
+}
+
+/* Фиксируем положение кнопки копирования для блоков кода */
+.markdown-rendered .embed-code-file-container .copy-code-button {
+    top: 4px !important;
+    right: 4px !important;
+}
+
+/* Специальные стили для изображений из Jupyter */
+.markdown-rendered .embed-jupyter-image {
+    padding: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+    margin: 0 !important;
+}
+
+.markdown-rendered .embed-jupyter-image p {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+
+.markdown-rendered .embed-jupyter-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 0 !important;
+    display: inline-block !important;
+}
+
+/* Стили для блоков только с изображением */
+.markdown-rendered .jupyter-image-only {
+    text-align: center;
+    margin: 15px 0 !important;
+    padding: 15px !important;
+    position: relative;
+    background-color: var(--code-background) !important;
+    border: var(--code-border-width) solid var(--code-border) !important;
+    border-radius: var(--radius-s) !important;
+}
+
+/* Перемещаем кнопку редактирования для блоков с изображениями */
+.markdown-rendered .jupyter-image-only + div > .edit-block-button {
+    top: auto !important;
+    bottom: 4px !important;
+    right: 4px !important;
+}
+
+.markdown-rendered .jupyter-image-only p {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+
+.markdown-rendered .jupyter-image-only img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin: 0 !important;
+}
+
+/* Уменьшаем отступы вокруг блоков кода в режиме чтения */
+.markdown-source-view.is-readable-line-width .cm-embed-block {
+    padding: 0;
+    margin: 0;
+}
+
+/* Общие стили для уменьшения отступов в режиме чтения */
+.markdown-preview-view div.code-block-flair {
+    margin: 0;
+    padding: 0;
+}
+
+/* Общие стили для кнопок редактирования */
+.markdown-rendered .edit-block-button {
+    z-index: 10 !important;
+}
+
+/* Перемещаем кнопку редактирования для ВСЕХ блоков кода в нижний правый угол */
+.markdown-rendered .embed-code-file-container + div > .edit-block-button,
+.markdown-rendered pre.code-block + div > .edit-block-button,
+.markdown-rendered div.code-block-wrap + div > .edit-block-button {
+    top: auto !important;
+    bottom: 4px !important;
+    right: 4px !important; 
+}
+
+/* Фиксируем положение кнопки копирования кода */
+.markdown-rendered .copy-code-button {
+    top: 4px !important;
+    right: 4px !important;
+    z-index: 5 !important;
+}
+
+/* Делаем кнопку копирования более заметной */
+.markdown-rendered .copy-code-button {
+    opacity: 0.7 !important;
+}
+
+.markdown-rendered .copy-code-button:hover {
+    opacity: 1 !important;
+}
+
+/* Перемещаем кнопку редактирования для блоков только с изображениями */
+.markdown-rendered .jupyter-image-only + div > .edit-block-button {
+    top: auto !important;
+    bottom: 4px !important;
+    right: 4px !important;
+}
+
+/* Специальные стили для блоков с изображениями без заголовка */
+.jupyter-image-only {
+    margin: 60px 0 30px 0 !important;
+    padding: 40px 25px 25px 25px !important;
+    background-color: var(--code-background) !important;
+    border: var(--code-border-width) solid var(--code-border) !important;
+    border-radius: var(--radius-s) !important;
+    display: block !important;
+    position: relative !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.jupyter-image-only p,
+.jupyter-image-only div {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: normal !important;
+}
+
+.jupyter-image-only img {
+    display: block !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
 }

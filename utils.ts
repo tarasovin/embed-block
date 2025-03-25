@@ -266,6 +266,44 @@ export async function getJupyterCellContent(
             let result = '';
             let imageIndex = 0;
             
+            // Проверяем, есть ли в выводе изображения matplotlib Figure
+            const hasFigureImage = cell.outputs.some(output => 
+                (output.output_type === 'display_data' || output.output_type === 'execute_result') && 
+                output.data && 
+                output.data['image/png']
+            );
+
+            // Сначала обрабатываем все изображения
+            // Они не должны подлежать обрезке по maxOutputSize
+            let imagesContent = '';
+            
+            for (const output of cell.outputs) {
+                if ((output.output_type === 'execute_result' || output.output_type === 'display_data') && 
+                    output.data && output.data['image/png'] && outputFormat === 'markdown') {
+                    
+                    const base64Image = output.data['image/png'];
+                    
+                    // Если есть все необходимые параметры и включена опция сохранения изображений
+                    if (app && settings && settings.saveImagesToAttachments && notebookPath) {
+                        const imageMd = await processJupyterImage(
+                            base64Image,
+                            notebookPath,
+                            cellSelector || 'unknown',
+                            imageIndex,
+                            app,
+                            settings
+                        );
+                        imagesContent += imageMd + '\n';
+                    } else {
+                        // Стандартное встраивание как base64
+                        imagesContent += `![](data:image/png;base64,${base64Image})\n`;
+                    }
+                    
+                    imageIndex++;
+                }
+            }
+            
+            // Теперь обрабатываем обычный текстовый вывод
             for (const output of cell.outputs) {
                 // Текстовый вывод (stdout, stderr)
                 if (output.output_type === 'stream') {
@@ -273,35 +311,30 @@ export async function getJupyterCellContent(
                 }
                 // Текстовые данные
                 else if (output.output_type === 'execute_result' || output.output_type === 'display_data') {
+                    // Обрабатываем текст
                     if (output.data && output.data['text/plain']) {
-                        result += output.data['text/plain'].join('');
-                    }
-                    // Изображения
-                    else if (output.data && output.data['image/png'] && outputFormat === 'markdown') {
-                        const base64Image = output.data['image/png'];
+                        const textOutput = output.data['text/plain'].join('');
                         
-                        // Если есть все необходимые параметры и включена опция сохранения изображений
-                        if (app && settings && settings.saveImagesToAttachments && notebookPath) {
-                            const imageMd = await processJupyterImage(
-                                base64Image,
-                                notebookPath,
-                                cellSelector || 'unknown',
-                                imageIndex,
-                                app,
-                                settings
-                            );
-                            result += imageMd + '\n';
-                        } else {
-                            // Стандартное встраивание как base64
-                            result += `![](data:image/png;base64,${base64Image})\n`;
+                        // Пропускаем текстовое представление Figure, если есть связанное изображение
+                        // Пропускаем разные форматы текстового представления matplotlib 
+                        if ((textOutput.trim().startsWith('<Figure') || 
+                             textOutput.trim().match(/^<matplotlib\.figure\.Figure/) ||
+                             textOutput.trim().match(/Figure\(\)/) ||
+                             textOutput.trim().match(/Figure\(.*\)/)) && 
+                            hasFigureImage) {
+                            // Пропускаем текстовое описание, т.к. изображение будет показано
+                            continue;
                         }
                         
-                        imageIndex++;
+                        result += textOutput;
                     }
+                    
                     // HTML вывод
-                    else if (output.data && output.data['text/html'] && outputFormat === 'markdown') {
+                    if (output.data && output.data['text/html'] && outputFormat === 'markdown') {
                         result += '\n```html\n' + output.data['text/html'].join('') + '\n```\n';
                     }
+                    
+                    // Изображения уже обработаны отдельно
                 }
                 // Ошибки
                 else if (output.output_type === 'error') {
@@ -312,12 +345,14 @@ export async function getJupyterCellContent(
                 }
             }
             
-            // Ограничиваем размер вывода
+            // Ограничиваем размер ТОЛЬКО текстового вывода
             if (result.length > maxOutputSize) {
                 result = result.substring(0, maxOutputSize) + '... (output truncated)';
             }
             
-            return result;
+            // Комбинируем изображения и текст
+            // Изображения ставим в начало, чтобы они точно были видны
+            return imagesContent + result;
         }
     }
     

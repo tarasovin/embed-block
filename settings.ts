@@ -33,7 +33,7 @@ export const DEFAULT_SETTINGS: EmbedCodeFileSettings = {
 	defaultEndMarker: "END_SNIPPET",
 	jupyterSupport: true,
 	jupyterOutputFormat: "markdown",
-	maxOutputSize: 1000,
+	maxOutputSize: 100000,
 	// Значения по умолчанию для сохранения изображений
 	saveImagesToAttachments: false,
 	imagesFolderPath: "", // Пустое значение означает использование папки Obsidian по умолчанию
